@@ -10,13 +10,14 @@ public class GameManager : MonoBehaviour
     
     public interface ISceneProvider
     {
-        GameObject Player { get; }
+        GameObject Player { get; } 
+        Spell GetNewSpell();
         void Init();
         void Deinit();
     }
     
     [SerializeField] private SceneProvider levelSceneProvider;
-    [SerializeField] private SpellsController spellsController;
+    [SerializeField] private SpellConfig[] spells;
     
     private ILevel _level;
     private ISceneProvider _levelSceneProvider;
@@ -33,6 +34,7 @@ public class GameManager : MonoBehaviour
 
         _levelSceneProvider = levelSceneProvider;
         var movementController = new MovementController(_levelSceneProvider.Player.transform, new HardcodedSpeedProvider());
+        var spellsController = new SpellsController(spells, _levelSceneProvider);
         _level = new Level(movementController, spellsController);
     }
 

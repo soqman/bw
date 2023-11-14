@@ -4,11 +4,14 @@ public class MovementController : Player.IMovementController
 {
     public interface ISpeedProvider
     {
-        public void ApplySpeed(ref Vector2 value);
+        public float Speed { get; }
     }
     
     private readonly Transform _root;
     private readonly ISpeedProvider _speedProvider;
+
+    public Vector2 Position => _root.position;
+    public Vector2 Direction => _root.up;
     
     public MovementController(Transform root, ISpeedProvider speedProvider)
     {
@@ -18,8 +21,10 @@ public class MovementController : Player.IMovementController
     
     public void Move(Vector2 value)
     {
-        var direction = value * Time.deltaTime;
-        _speedProvider.ApplySpeed(ref direction);
-        _root.Translate(direction);
+        Vector3 movement = value * Time.deltaTime * _speedProvider.Speed;
+        _root.position += movement;
+        _root.up = value.normalized;
     }
+
+   
 }

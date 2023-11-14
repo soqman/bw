@@ -6,18 +6,18 @@ public class Player
     {
         void SetNext();
         void SetPrevious();
-        void Fire(Vector2 vector);
+        void Fire(Vector2 startPosition, Vector2 direction);
     }
     
     public interface IMovementController
     {
         public void Move(Vector2 value);
+        Vector2 Position { get; }
+        Vector2 Direction { get; }
     }
 
     private readonly ISpellsController _spellsController;
     private readonly IMovementController _movementController;
-
-    private Vector2 _currentDirection;
 
 
     public Player(IMovementController movementController, ISpellsController spellsController)
@@ -46,13 +46,12 @@ public class Player
     {
         if (value == Vector2.zero) return;
         
-        _currentDirection = value.normalized;
         _movementController.Move(value);
     }
 
     private void OnFireDown()
     {
-        _spellsController.Fire(_currentDirection);
+        _spellsController.Fire(_movementController.Position, _movementController.Direction);
     }
 
     private void OnLeftTriggerDown()

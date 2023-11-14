@@ -1,20 +1,35 @@
 ﻿using UnityEngine;
 
-public class SpellsController : MonoBehaviour, Player.ISpellsController
+public class SpellsController : Player.ISpellsController
 {
-    //example of a controller that is already configured on the stage
+    private readonly SpellConfig[] _spells;
+    private readonly GameManager.ISceneProvider _sceneProvider;
+    
+    private int _selectedIndex;
+
+    public SpellsController(SpellConfig[] spells, GameManager.ISceneProvider sceneProvider)
+    {
+        _sceneProvider = sceneProvider;
+        _spells = spells;
+    }
+    
     public void SetNext()
     {
-        Debug.Log("Next spell chose");
+        _selectedIndex = (_selectedIndex + 1) % _spells.Length;
     }
 
     public void SetPrevious()
     {
-        Debug.Log("Previous spell chose");
+        _selectedIndex = (_selectedIndex - 1) % _spells.Length;
+        if (_selectedIndex < 0)
+        {
+            _selectedIndex = _spells.Length - 1;
+        }
     }
 
-    public void Fire(Vector2 vector)
+    public void Fire(Vector2 startPosition, Vector2 direction)
     {
-        Debug.Log($"Fire {vector}");
+        var spell = _sceneProvider.GetNewSpell();
+        spell.Play(_spells[_selectedIndex], startPosition, direction);
     }
 }
