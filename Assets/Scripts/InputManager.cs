@@ -14,7 +14,7 @@ public class InputManager : MonoBehaviour
         var y = Input.GetAxis("Vertical");
         OnJoystickUpdate?.Invoke(new Vector2(x, y));
 
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.X) || Input.GetKeyDown(KeyCode.Space))
         {
             OnFireDown?.Invoke();
         }

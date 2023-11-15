@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     {
         GameObject Player { get; } 
         Spell GetNewSpell();
+        Rect Rect { get; }
         void Init();
         void Deinit();
     }
@@ -25,6 +26,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Init();
+        StartGame();
     }
 
     private void Init()
@@ -33,7 +35,7 @@ public class GameManager : MonoBehaviour
         //In my case, the data will be taken from the serialized scene objects and scriptableObjects .
 
         _levelSceneProvider = levelSceneProvider;
-        var movementController = new MovementController(_levelSceneProvider.Player.transform, new HardcodedSpeedProvider());
+        var movementController = new MovementController(_levelSceneProvider.Player.transform, new HardcodedSpeedProvider(), _levelSceneProvider);
         var spellsController = new SpellsController(spells, _levelSceneProvider);
         _level = new Level(movementController, spellsController);
     }

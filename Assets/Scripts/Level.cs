@@ -3,7 +3,7 @@ using UnityEngine;
 public class Level : GameManager.ILevel
 {
     private bool _isStarted;
-    private Player _player;
+    private readonly Player _player;
 
     public Level(Player.IMovementController moveController, Player.ISpellsController spellsController)
     {

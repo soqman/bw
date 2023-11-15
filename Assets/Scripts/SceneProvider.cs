@@ -8,10 +8,12 @@ public class SceneProvider : MonoBehaviour, GameManager.ISceneProvider
     [SerializeField] private GameObject player;
     [SerializeField] private Spell spellPrefab;
     [SerializeField] private Transform root;
+    [SerializeField] private Rect sceneRect;
 
     private readonly List<Spell> _spellsPool = new();
 
     public GameObject Player => player;
+    public Rect Rect => sceneRect;
     
     
     public Spell GetNewSpell()
