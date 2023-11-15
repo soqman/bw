@@ -8,14 +8,16 @@ public class EnemiesController : Level.ILevelComponent
     private readonly int _maxCount;
     private readonly List<Enemy> _enemies = new();
     private readonly Enemy.IEnemyData[] _configs;
+    private readonly BaseSwarmController _swarmController;
     
     private bool _isActive;
     
-    public EnemiesController(int maxCount, GameManager.ISceneProvider sceneProvider, Enemy.IEnemyData[] configs)
+    public EnemiesController(int maxCount, GameManager.ISceneProvider sceneProvider, Enemy.IEnemyData[] configs, BaseSwarmController swarmController)
     {
         _sceneProvider = sceneProvider;
         _maxCount = maxCount;
         _configs = configs;
+        _swarmController = swarmController;
     }
     
     public void OnStartLevel()
@@ -64,6 +66,7 @@ public class EnemiesController : Level.ILevelComponent
         enemy.transform.position = GetRandomPointOnPerimeter(_sceneProvider.Rect, _sceneProvider.EnemySpawnOffset);
         enemy.OnDead += OnEnemyDead;
         enemy.Init(_configs[Random.Range(0, _configs.Length)]);
+        _swarmController.RegisterUnit(enemy);
         _enemies.Add(enemy);
     }
     
@@ -85,6 +88,7 @@ public class EnemiesController : Level.ILevelComponent
     {
         enemy.OnDead -= OnEnemyDead;
         enemy.Deinit();
+        _swarmController.UnregisterUnit(enemy);
         _enemies.Remove(enemy);
     }
 }

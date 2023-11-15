@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IDamageable
+public class Enemy : MonoBehaviour, IDamageable, ISwarmUnit
 {
     public interface IEnemyData
     {
@@ -12,14 +12,18 @@ public class Enemy : MonoBehaviour, IDamageable
         public Sprite Image { get; }
     }
 
+    public event Action<Enemy> OnDead;
+    
     //you could separate logic and representation, but that would be overcomplicating the task within the scope of the test
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private CustomAnimation damageAnimation;
     
-    public event Action<Enemy> OnDead;
-    
     private float _health;
     private IEnemyData _config;
+
+
+    public Transform Transform => transform;
+    public float Speed => _config.Speed;
 
     public void Init(IEnemyData config)
     {

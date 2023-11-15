@@ -17,8 +17,6 @@ public class GameManager : MonoBehaviour
         Spell GetNewSpell();
         Enemy GetNewEnemy();
         Rect Rect { get; }
-        void Init();
-        void Deinit();
         float EnemySpawnOffset { get; }
     }
 
@@ -26,6 +24,7 @@ public class GameManager : MonoBehaviour
     public static event Action OnGameEnded;
     
     [SerializeField] private SceneProvider levelSceneProvider;
+    [SerializeField] private BaseSwarmController swarmController;
     
     [Header("Level settings")]
     [SerializeField] private SpellConfig[] spells;
@@ -35,7 +34,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float playerArmor;
     
     private ILevel _level;
-    private ISceneProvider _levelSceneProvider;
     private Player _player;
 
     private void Start()
@@ -47,18 +45,18 @@ public class GameManager : MonoBehaviour
     {
         //in real use, the game may be initialized in a different way and in a different place.  
         //In my case, the data will be taken from the serialized scene objects and scriptableObjects .
-
-        _levelSceneProvider = levelSceneProvider;
-        var movementController = new MovementController(_levelSceneProvider.Player.transform, new HardcodedSpeedProvider(), _levelSceneProvider);
-        var spellsController = new SpellsController(spells, _levelSceneProvider);
-        _player = _levelSceneProvider.Player;
+        
+        var movementController = new MovementController(levelSceneProvider.Player.transform, new HardcodedSpeedProvider(), levelSceneProvider);
+        var spellsController = new SpellsController(spells, levelSceneProvider);
+        _player = levelSceneProvider.Player;
         _player.Init(movementController, spellsController, playerHealth, playerArmor);
-        var enemiesController = new EnemiesController(enemiesCountMax, _levelSceneProvider, enemies);
+        var enemiesController = new EnemiesController(enemiesCountMax, levelSceneProvider, enemies, swarmController);
 
         var levelComponents = new List<Level.ILevelComponent>()
         {
             _player,
             enemiesController,
+            swarmController,
         };
             
         _level = new Level(levelComponents.ToArray());
@@ -68,7 +66,7 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         _player.OnDead += StopGame;
-        _levelSceneProvider.Init();
+        levelSceneProvider.Init();
         _level?.StartLevel();
         OnGameStarted?.Invoke();
     }
@@ -77,7 +75,7 @@ public class GameManager : MonoBehaviour
     public void StopGame()
     {
         _player.OnDead -= StopGame;
-        _levelSceneProvider.Deinit();
+        levelSceneProvider.Deinit();
         _level?.StopLevel();
         OnGameEnded?.Invoke();
     }
