@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ public class GameManager : MonoBehaviour
     public interface ISceneProvider
     {
         MonoBehaviour LevelRoutines { get; }
-        GameObject Player { get; } 
+        Player Player { get; } 
         Spell GetNewSpell();
         Enemy GetNewEnemy();
         Rect Rect { get; }
@@ -20,19 +21,26 @@ public class GameManager : MonoBehaviour
         void Deinit();
         float EnemySpawnOffset { get; }
     }
+
+    public static event Action OnGameStarted;
+    public static event Action OnGameEnded;
     
     [SerializeField] private SceneProvider levelSceneProvider;
+    
+    [Header("Level settings")]
     [SerializeField] private SpellConfig[] spells;
     [SerializeField] private EnemyConfig[] enemies;
     [SerializeField] private int enemiesCountMax;
+    [SerializeField] private float playerHealth;
+    [SerializeField] private float playerArmor;
     
     private ILevel _level;
     private ISceneProvider _levelSceneProvider;
+    private Player _player;
 
     private void Start()
     {
         Init();
-        StartGame();
     }
 
     private void Init()
@@ -43,11 +51,14 @@ public class GameManager : MonoBehaviour
         _levelSceneProvider = levelSceneProvider;
         var movementController = new MovementController(_levelSceneProvider.Player.transform, new HardcodedSpeedProvider(), _levelSceneProvider);
         var spellsController = new SpellsController(spells, _levelSceneProvider);
+        _player = _levelSceneProvider.Player;
+        _player.Init(movementController, spellsController, playerHealth, playerArmor);
+        var enemiesController = new EnemiesController(enemiesCountMax, _levelSceneProvider, enemies);
 
         var levelComponents = new List<Level.ILevelComponent>()
         {
-            new Player(movementController, spellsController),
-            new EnemiesController(enemiesCountMax, _levelSceneProvider, enemies),
+            _player,
+            enemiesController,
         };
             
         _level = new Level(levelComponents.ToArray());
@@ -56,14 +67,18 @@ public class GameManager : MonoBehaviour
     [EditorButton]
     public void StartGame()
     {
+        _player.OnDead += StopGame;
         _levelSceneProvider.Init();
         _level?.StartLevel();
+        OnGameStarted?.Invoke();
     }
 
     [EditorButton]
     public void StopGame()
     {
+        _player.OnDead -= StopGame;
         _levelSceneProvider.Deinit();
         _level?.StopLevel();
+        OnGameEnded?.Invoke();
     }
 }

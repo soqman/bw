@@ -18,17 +18,17 @@ public class EnemiesController : Level.ILevelComponent
         _configs = configs;
     }
     
-    public void Start()
+    public void OnStartLevel()
     {
         StartSpawn();
     }
 
-    public void Stop()
+    public void OnStopLevel()
     {
         StopSpawn();
         foreach (var enemy in _enemies)
         {
-            enemy.OnKill -= OnEnemyKilled;
+            enemy.OnDead -= OnEnemyDead;
         }
         
         _enemies.Clear();
@@ -62,7 +62,7 @@ public class EnemiesController : Level.ILevelComponent
     {
         var enemy = _sceneProvider.GetNewEnemy();
         enemy.transform.position = GetRandomPointOnPerimeter(_sceneProvider.Rect, _sceneProvider.EnemySpawnOffset);
-        enemy.OnKill += OnEnemyKilled;
+        enemy.OnDead += OnEnemyDead;
         enemy.Init(_configs[Random.Range(0, _configs.Length)]);
         _enemies.Add(enemy);
     }
@@ -81,9 +81,9 @@ public class EnemiesController : Level.ILevelComponent
         };
     }
 
-    private void OnEnemyKilled(Enemy enemy)
+    private void OnEnemyDead(Enemy enemy)
     {
-        enemy.OnKill -= OnEnemyKilled;
+        enemy.OnDead -= OnEnemyDead;
         enemy.Deinit();
         _enemies.Remove(enemy);
     }

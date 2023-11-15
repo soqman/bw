@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, Spell.IDamageable
+public class Enemy : MonoBehaviour, IDamageable
 {
     public interface IEnemyData
     {
@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour, Spell.IDamageable
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private CustomAnimation damageAnimation;
     
-    public event Action<Enemy> OnKill;
+    public event Action<Enemy> OnDead;
     
     private float _health;
     private IEnemyData _config;
@@ -49,9 +49,19 @@ public class Enemy : MonoBehaviour, Spell.IDamageable
             Kill();
         }
     }
+    
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (_config == null) return;
+        if (other.CompareTag(GameTag.Player))
+        {
+            var damageable = other.GetComponent<IDamageable>();
+            damageable?.ApplyDamage(_config.Damage);
+        }
+    }
 
     private void Kill()
     {
-        OnKill?.Invoke(this);
+        OnDead?.Invoke(this);
     }
 }

@@ -8,8 +8,8 @@ public class Level : GameManager.ILevel
     
     public interface ILevelComponent
     {
-        void Start();
-        void Stop();
+        void OnStartLevel();
+        void OnStopLevel();
     }
 
     public Level(ILevelComponent[] levelPlayables)
@@ -24,7 +24,7 @@ public class Level : GameManager.ILevel
 
         foreach (var item in _levelPlayables)
         {
-            item.Start();
+            item.OnStartLevel();
         }
         
         _isStarted = true;
@@ -37,7 +37,7 @@ public class Level : GameManager.ILevel
         
         foreach (var item in _levelPlayables)
         {
-            item.Stop();
+            item.OnStopLevel();
         }
         
         _isStarted = false;

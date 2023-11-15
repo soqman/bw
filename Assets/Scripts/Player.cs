@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-public class Player : Level.ILevelComponent
+public class Player : MonoBehaviour, Level.ILevelComponent, IDamageable
 {
     public interface ISpellsController
     {
@@ -16,14 +17,25 @@ public class Player : Level.ILevelComponent
         Vector2 Direction { get; }
     }
 
-    private readonly ISpellsController _spellsController;
-    private readonly IMovementController _movementController;
+    public event Action OnDead;
+
+    [SerializeField] private CustomAnimation damageAnimation;
+    [SerializeField] private SpriteRenderer spriteRenderer;
+
+    private ISpellsController _spellsController;
+    private IMovementController _movementController;
+    private float _armor;
+    private float _initialHealth;
+
+    private float _health;
 
 
-    public Player(IMovementController movementController, ISpellsController spellsController)
+    public void Init(IMovementController movementController, ISpellsController spellsController, float initialHealth, float armor)
     {
         _movementController = movementController;
         _spellsController = spellsController;
+        _armor = armor;
+        _initialHealth = initialHealth;
     }
     
     private void Register()
@@ -64,13 +76,35 @@ public class Player : Level.ILevelComponent
         _spellsController.SetNext();
     }
 
-    public void Start()
+    public void OnStartLevel()
     {
+        _health = _initialHealth;
+        transform.position = Vector3.zero;
+        spriteRenderer.color = Color.white;
         Register();
     }
     
-    public void Stop()
+    public void OnStopLevel()
     {
         Unregister();
+    }
+
+    public void ApplyDamage(float value)
+    {
+        if (value == 0) return;
+
+        var damage = value * (1 - _armor);
+        _health -= damage;
+        damageAnimation.Play();
+        Debug.Log($"damaged: {damage}");
+        if (_health < 0)
+        {
+            Kill();
+        }
+    }
+
+    private void Kill()
+    {
+        OnDead?.Invoke();
     }
 }

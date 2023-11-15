@@ -3,11 +3,6 @@ using UnityEngine;
 
 public class Spell : MonoBehaviour
 {
-    public interface IDamageable
-    {
-        void ApplyDamage(float value);
-    }
-    
     public interface ISpellData
     {
         //it can be sprite, or mesh, or smth any other view

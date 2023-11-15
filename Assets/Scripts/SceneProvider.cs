@@ -5,7 +5,7 @@ public class SceneProvider : MonoBehaviour, GameManager.ISceneProvider
 {
     // I don't want to write resource management logic because it depends on usage scenarios
     
-    [SerializeField] private GameObject player;
+    [SerializeField] private Player player;
     [SerializeField] private Spell spellPrefab;
     [SerializeField] private Enemy enemyPrefab;
     [SerializeField] private Transform root;
@@ -15,7 +15,7 @@ public class SceneProvider : MonoBehaviour, GameManager.ISceneProvider
     private readonly List<Spell> _spellsPool = new();
     private readonly List<Enemy> _enemiesPool = new();
 
-    public GameObject Player => player;
+    public Player Player => player;
     public MonoBehaviour LevelRoutines => this;
     public Rect Rect => sceneRect;
     public float EnemySpawnOffset => enemySpawnOffset;
@@ -53,12 +53,19 @@ public class SceneProvider : MonoBehaviour, GameManager.ISceneProvider
     
     public void Init()
     {
-        player.SetActive(true);
+        player.gameObject.SetActive(true);
     }
 
     public void Deinit()
     {
-        player.SetActive(false);
-        _spellsPool.Clear();
+        player.gameObject.SetActive(false);
+        foreach (var item in _spellsPool)
+        {
+            item.gameObject.SetActive(false);
+        }
+        foreach (var item in _enemiesPool)
+        {
+            item.gameObject.SetActive(false);
+        }
     }
 }
