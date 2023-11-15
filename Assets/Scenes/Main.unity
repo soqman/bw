@@ -173,6 +173,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 462d7817ae613a14d903d36241cbd588, type: 2}
   - {fileID: 11400000, guid: 25043a19a36de214a90334657bd119e3, type: 2}
   - {fileID: 11400000, guid: 338f3dfe67524d44f8d1f7b6685ed694, type: 2}
+  enemies:
+  - {fileID: 11400000, guid: 97472dd3cc80e49428d432c100bd6c13, type: 2}
+  - {fileID: 11400000, guid: 1ff2cba6e7de8d4458b18a4e53b6da56, type: 2}
+  - {fileID: 11400000, guid: 7604cc7c48fded943800961016556670, type: 2}
+  enemiesCountMax: 10
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -296,6 +301,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1229319588}
   spellPrefab: {fileID: 7037291827825655112, guid: 76be04e9dfca0204bb33062d68f300f2, type: 3}
+  enemyPrefab: {fileID: 4536942841265506437, guid: 5ed31b56b9a02b34ba3e8dfc052f2c07, type: 3}
   root: {fileID: 1054987415}
   sceneRect:
     serializedVersion: 2
@@ -303,6 +309,7 @@ MonoBehaviour:
     y: -4.5
     width: 17
     height: 9
+  enemySpawnOffset: 0
 --- !u!4 &616815404
 Transform:
   m_ObjectHideFlags: 0
@@ -618,8 +625,8 @@ SpriteRenderer:
   m_SortingLayerID: 1263323241
   m_SortingLayer: 1
   m_SortingOrder: 1
-  m_Sprite: {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

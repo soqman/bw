@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 627579859
   m_SortingLayer: 2
   m_SortingOrder: 1
-  m_Sprite: {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 6267145106660814914}
   - component: {fileID: 4062632619100673286}
   - component: {fileID: 4536942841265506437}
+  - component: {fileID: 1011527351125375319}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -162,7 +163,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
-  m_Color: {r: 0.4811321, g: 0.0030259283, b: 0.0030259283, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -246,3 +247,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8db3ccca822b42c5949a12eb711d620b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 5804243261717661187}
+  damageAnimation: {fileID: 1011527351125375319}
+--- !u!114 &1011527351125375319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7599196506746715778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe63d0ad694c41b09dfac0bb9a8de49a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 5804243261717661187}
+  damageColor: {r: 1, g: 0, b: 0, a: 1}
+  animationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  time: 0.5

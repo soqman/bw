@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Player
+public class Player : Level.ILevelComponent
 {
     public interface ISpellsController
     {
@@ -64,12 +64,12 @@ public class Player
         _spellsController.SetNext();
     }
 
-    public void Init()
+    public void Start()
     {
         Register();
     }
     
-    public void Deinit()
+    public void Stop()
     {
         Unregister();
     }

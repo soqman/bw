@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -10,15 +11,20 @@ public class GameManager : MonoBehaviour
     
     public interface ISceneProvider
     {
+        MonoBehaviour LevelRoutines { get; }
         GameObject Player { get; } 
         Spell GetNewSpell();
+        Enemy GetNewEnemy();
         Rect Rect { get; }
         void Init();
         void Deinit();
+        float EnemySpawnOffset { get; }
     }
     
     [SerializeField] private SceneProvider levelSceneProvider;
     [SerializeField] private SpellConfig[] spells;
+    [SerializeField] private EnemyConfig[] enemies;
+    [SerializeField] private int enemiesCountMax;
     
     private ILevel _level;
     private ISceneProvider _levelSceneProvider;
@@ -37,7 +43,14 @@ public class GameManager : MonoBehaviour
         _levelSceneProvider = levelSceneProvider;
         var movementController = new MovementController(_levelSceneProvider.Player.transform, new HardcodedSpeedProvider(), _levelSceneProvider);
         var spellsController = new SpellsController(spells, _levelSceneProvider);
-        _level = new Level(movementController, spellsController);
+
+        var levelComponents = new List<Level.ILevelComponent>()
+        {
+            new Player(movementController, spellsController),
+            new EnemiesController(enemiesCountMax, _levelSceneProvider, enemies),
+        };
+            
+        _level = new Level(levelComponents.ToArray());
     }
 
     [EditorButton]

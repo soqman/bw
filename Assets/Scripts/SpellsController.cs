@@ -2,12 +2,12 @@
 
 public class SpellsController : Player.ISpellsController
 {
-    private readonly SpellConfig[] _spells;
+    private readonly Spell.ISpellData[] _spells;
     private readonly GameManager.ISceneProvider _sceneProvider;
     
     private int _selectedIndex;
 
-    public SpellsController(SpellConfig[] spells, GameManager.ISceneProvider sceneProvider)
+    public SpellsController(Spell.ISpellData[] spells, GameManager.ISceneProvider sceneProvider)
     {
         _sceneProvider = sceneProvider;
         _spells = spells;

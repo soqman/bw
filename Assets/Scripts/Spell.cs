@@ -8,15 +8,24 @@ public class Spell : MonoBehaviour
         void ApplyDamage(float value);
     }
     
+    public interface ISpellData
+    {
+        //it can be sprite, or mesh, or smth any other view
+        public Color Color { get; }
+        public float Damage { get; }
+        public float Speed { get; }
+    }
+    
+    //you could separate logic and representation, but that would be overcomplicating the task within the scope of the test
     [SerializeField] private SpriteRenderer spriteRenderer;
     
-    private SpellConfig _config;
+    private ISpellData _config;
     private bool _isFlying;
     private Vector2 _direction;
 
     public bool IsBusy => _isFlying;
 
-    public void Play(SpellConfig config, Vector2 startPosition, Vector2 direction)
+    public void Play(ISpellData config, Vector2 startPosition, Vector2 direction)
     {
         _config = config;
         _direction = direction;
@@ -28,7 +37,7 @@ public class Spell : MonoBehaviour
     {
         if (_config == null) return;
         
-        spriteRenderer.sprite = _config.Image;
+        spriteRenderer.color = _config.Color;
         transform.position = startPosition;
         gameObject.SetActive(true);
     }
@@ -58,10 +67,11 @@ public class Spell : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (_config == null) return;
         if (other.CompareTag(GameTag.Enemy))
         {
             var damageable = other.GetComponent<IDamageable>();
-            damageable.ApplyDamage(_config.Damage);
+            damageable?.ApplyDamage(_config.Damage);
             Reset();
         }
     }

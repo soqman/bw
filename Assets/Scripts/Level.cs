@@ -2,19 +2,31 @@ using UnityEngine;
 
 public class Level : GameManager.ILevel
 {
+    private readonly ILevelComponent[] _levelPlayables;
+    
     private bool _isStarted;
-    private readonly Player _player;
-
-    public Level(Player.IMovementController moveController, Player.ISpellsController spellsController)
+    
+    public interface ILevelComponent
     {
-        _player = new Player(moveController, spellsController);
+        void Start();
+        void Stop();
+    }
+
+    public Level(ILevelComponent[] levelPlayables)
+    {
+        //At first I was passing components here to create a level individually. But then I realized that this class has no other functionality than to manage the life cycle of the level
+        _levelPlayables = levelPlayables;
     }
     
     public void StartLevel()
     {
         if (_isStarted) return;
+
+        foreach (var item in _levelPlayables)
+        {
+            item.Start();
+        }
         
-        _player.Init();
         _isStarted = true;
         Debug.Log("level started");
     }
@@ -23,7 +35,11 @@ public class Level : GameManager.ILevel
     {
         if (!_isStarted) return;
         
-        _player.Deinit();
+        foreach (var item in _levelPlayables)
+        {
+            item.Stop();
+        }
+        
         _isStarted = false;
         Debug.Log("level stopped");
     }

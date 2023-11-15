@@ -9,9 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b54d78a09792075468aebae7295fafdf, type: 3}
-  m_Name: Circle
+  m_Script: {fileID: 11500000, guid: d77f0005a3204027939664c4a7d37755, type: 3}
+  m_Name: TriangleEnemy
   m_EditorClassIdentifier: 
-  image: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
-  damage: 10
-  speed: 10
+  health: 50
+  armor: 0.5
+  damage: 100
+  speed: 2
+  image: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}

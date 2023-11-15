@@ -7,15 +7,20 @@ public class SceneProvider : MonoBehaviour, GameManager.ISceneProvider
     
     [SerializeField] private GameObject player;
     [SerializeField] private Spell spellPrefab;
+    [SerializeField] private Enemy enemyPrefab;
     [SerializeField] private Transform root;
     [SerializeField] private Rect sceneRect;
+    [SerializeField] private float enemySpawnOffset;
 
     private readonly List<Spell> _spellsPool = new();
+    private readonly List<Enemy> _enemiesPool = new();
 
     public GameObject Player => player;
+    public MonoBehaviour LevelRoutines => this;
     public Rect Rect => sceneRect;
+    public float EnemySpawnOffset => enemySpawnOffset;
     
-    
+    //Here you can make a universal pool manager for any objects, but I don't need it right now
     public Spell GetNewSpell()
     {
          foreach (var spell in _spellsPool)
@@ -29,6 +34,21 @@ public class SceneProvider : MonoBehaviour, GameManager.ISceneProvider
          var newSpell = Instantiate(spellPrefab, root);
          _spellsPool.Add(newSpell);
          return newSpell;
+    }
+    
+    public Enemy GetNewEnemy()
+    {
+        foreach (var enemy in _enemiesPool)
+        {
+            if (!enemy.gameObject.activeSelf)
+            {
+                return enemy;
+            }
+        }
+         
+        var newEnemy = Instantiate(enemyPrefab, root);
+        _enemiesPool.Add(newEnemy);
+        return newEnemy;
     }
     
     public void Init()

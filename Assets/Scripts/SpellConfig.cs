@@ -1,13 +1,13 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Spell", menuName = "Configs/Spell")]
-public class SpellConfig : ScriptableObject
+public class SpellConfig : ScriptableObject, Spell.ISpellData
 {
-    [SerializeField] private Sprite image;
+    [SerializeField] private Color color;
     [SerializeField] private float damage;
     [SerializeField] private float speed;
 
-    public Sprite Image => image;
+    public Color Color => color;
     public float Damage => damage;
     public float Speed => speed;
 }
