@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class Player : MonoBehaviour, Level.ILevelComponent, IDamageable
+public class Player : MonoBehaviour, Level.ILevelComponent, IDamageable, SpellsController.ISpellCasterView
 {
     public interface ISpellsController
     {
@@ -21,6 +21,7 @@ public class Player : MonoBehaviour, Level.ILevelComponent, IDamageable
 
     [SerializeField] private CustomAnimation damageAnimation;
     [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private SpriteRenderer spellRenderer;
 
     private ISpellsController _spellsController;
     private IMovementController _movementController;
@@ -106,5 +107,10 @@ public class Player : MonoBehaviour, Level.ILevelComponent, IDamageable
     private void Kill()
     {
         OnDead?.Invoke();
+    }
+
+    public void SetColor(Color color)
+    {
+        spellRenderer.color = color;
     }
 }

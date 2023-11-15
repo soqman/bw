@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
         //In my case, the data will be taken from the serialized scene objects and scriptableObjects .
         
         var movementController = new MovementController(levelSceneProvider.Player.transform, new HardcodedSpeedProvider(), levelSceneProvider);
-        var spellsController = new SpellsController(spells, levelSceneProvider);
+        var spellsController = new SpellsController(spells, levelSceneProvider, levelSceneProvider.Player);
         _player = levelSceneProvider.Player;
         _player.Init(movementController, spellsController, playerHealth, playerArmor);
         var enemiesController = new EnemiesController(enemiesCountMax, levelSceneProvider, enemies, swarmController);

@@ -441,7 +441,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1ff2cba6e7de8d4458b18a4e53b6da56, type: 2}
   - {fileID: 11400000, guid: 7604cc7c48fded943800961016556670, type: 2}
   enemiesCountMax: 10
-  playerHealth: 50
+  playerHealth: 100
   playerArmor: 0.1
 --- !u!1 &519420028
 GameObject:
@@ -1076,6 +1076,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageAnimation: {fileID: 1229319594}
   spriteRenderer: {fileID: 1229319589}
+  spellRenderer: {fileID: 1350853922}
 --- !u!114 &1229319594
 MonoBehaviour:
   m_ObjectHideFlags: 0
